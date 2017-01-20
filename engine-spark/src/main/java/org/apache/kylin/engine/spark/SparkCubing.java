@@ -630,7 +630,10 @@ public class SparkCubing extends AbstractApplication {
         kyroClasses.add(org.apache.kylin.dimension.TimeDimEnc.class);
         kyroClasses.add(org.apache.kylin.cube.model.AggregationGroup.HierarchyMask.class);
         kyroClasses.add(org.apache.kylin.measure.topn.DoubleDeltaSerializer.class);
-        kyroClasses.add(org.apache.kylin.measure.topn.Counter.class);
+        kyroClasses.add(org.apache.kylin.measure.percentile.PercentileCounter.class);
+        kyroClasses.add(org.apache.kylin.measure.percentile.PercentileSerializer.class);
+        kyroClasses.add(org.apache.kylin.measure.bitmap.RoaringBitmapCounter.class);
+        kyroClasses.add(org.apache.kylin.measure.bitmap.RoaringBitmapCounterFactory.class);
 
         try {
             kyroClasses.add(Class.forName("com.google.common.collect.EmptyImmutableList"));

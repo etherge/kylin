@@ -68,6 +68,12 @@ abstract public class KylinConfigBase implements Serializable {
             return sparkHome;
         }
 
+        sparkHome = System.getProperty("SPARK_HOME");
+        if (StringUtils.isNotEmpty(sparkHome)) {
+            logger.info("SPARK_HOME was set to " + sparkHome);
+            return sparkHome;
+        }
+
         return getKylinHome() + File.separator + "spark";
     }
 
