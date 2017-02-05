@@ -72,7 +72,7 @@ public class ITHDFSResourceStoreTest extends HBaseMetadataTestCase {
     @Test
     public void testFullQalifiedName() throws Exception {
         String oldUrl = kylinConfig.getMetadataUrl();
-        String path = "hdfs://sandbox.hortonworks.com:8020/kylin/kylin_metadata/metadata_test2";
+        String path = "hdfs://qa-cluster-01:8020/kylin/kylin_metadata/metadata_test2";
         kylinConfig.setProperty("kylin.metadata.url", path + "@hdfs");
         HDFSResourceStore store = new HDFSResourceStore(kylinConfig);
         ResourceStoreTest.testAStore(store);
