@@ -37,9 +37,9 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.metadata.RelMetadataQuery;
 import org.apache.calcite.rel.type.RelDataType;
+import org.apache.calcite.rel.type.RelDataTypeFactory.FieldInfoBuilder;
 import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rel.type.RelDataTypeFieldImpl;
-import org.apache.calcite.rel.type.RelDataTypeFactory.FieldInfoBuilder;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexLiteral;
@@ -201,12 +201,21 @@ public class OLAPProjectRel extends Project implements OLAPRel {
                 return translateFirstRexInputRef(call, inputColumnRowType, fieldName, sourceCollector);
             }
         } else if (operator instanceof SqlCaseOperator) {
+            this.context.afterAggregate = true;
+            TblColRef column = null;
             for (RexNode operand : call.getOperands()) {
                 if (operand instanceof RexInputRef) {
                     RexInputRef inputRef = (RexInputRef) operand;
-                    return translateRexInputRef(inputRef, inputColumnRowType, fieldName, sourceCollector);
+                    column = translateRexInputRef(inputRef, inputColumnRowType, fieldName, sourceCollector);
+                } else if (operand instanceof RexLiteral) {
+                    RexLiteral literal = (RexLiteral) operand;
+                    translateRexLiteral(literal);
+                } else if (operand instanceof RexCall) {
+                    translateRexCall((RexCall) operand, inputColumnRowType, fieldName, sourceCollector);
                 }
             }
+            if (column != null)
+                return column;
         }
 
         for (RexNode operand : call.getOperands()) {
